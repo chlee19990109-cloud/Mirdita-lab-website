@@ -34,6 +34,7 @@ jobs:
             node_modules
             minimolstar/node_modules
             minimolstar/molstar.js
+            ~/.cache/puppeteer
           key: build-${{ runner.os }}-${{ hashFiles('package-lock.json', 'minimolstar/package-lock.json') }}
 
       - name: Install ImageMagick
@@ -42,6 +43,10 @@ jobs:
       - name: Install dependencies
         if: steps.cache-build.outputs.cache-hit != 'true'
         run: npm ci
+
+      - name: Install Puppeteer Chrome
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        run: npx puppeteer browsers install chrome
 
       - name: Build mol*
         if: steps.cache-build.outputs.cache-hit != 'true'
